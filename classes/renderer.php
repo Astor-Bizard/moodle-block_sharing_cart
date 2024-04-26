@@ -194,6 +194,14 @@ class renderer {
         }
         catch (\Exception $e) {}
 
+        // Create a download button for .mbz file.
+        $storage = new storage();
+        $file = $storage->get($item->filename);
+        $downloadurl = \moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(),
+                null, $file->get_filepath(), $file->get_filename(), true);
+        $downloadbutton = html_writer::link($downloadurl, '<i class="fa fa-download" alt="' . get_string('download') . '"></i>',
+                [ 'title' => get_string('downloadfile') ]);
+
         return '
 				<li class="activity sharing-cart-item' . $class . '"
 				    id="block_sharing_cart-item-' . $item->id . '"
@@ -204,7 +212,7 @@ class renderer {
 					<div class="sc-indent-' . $depth . '" title="' . $title . '">
 						' . self::render_modicon($item) . '
 						<span class="instancename">' . $item->modtext . '</span>
-						<span class="commands"></span>
+						<span class="commands">' . $downloadbutton . '</span>
 					</div>
 				</li>';
     }
